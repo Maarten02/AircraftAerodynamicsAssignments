@@ -1,0 +1,48 @@
+[Wing]
+#Mach
+0.5
+#IYsym IZsym Zsym
+0 0 0.0
+#Sref Cref Bref
+108.136 3.862 28.0
+#Xref Yref Zref
+0.0 0.0 0.0
+!begingeometry
+#====================================================================
+SURFACE
+[WingSur]
+!beginsurface
+#Nchordwise Cspace Nspanwise Sspace
+12 1.0 20 1.0
+#
+YDUPLICATE
+0.0
+#
+ANGLE
+0.0
+#-------------------------------------------------------------
+SECTION
+!beginsection
+#Xle Yle Zle Chord Ainc Nspanwise Sspace
+0.0 0.0 0.0 5.5 0.0 0.0 0 0
+NACA
+2312
+!endsection
+#-------------------------------------------------------------
+SECTION
+!beginsection
+#Xle Yle Zle Chord Ainc Nspanwise Sspace
+3.5 14.0 0.0 2.0 0.0 0 0
+NACA
+2312
+!endsection
+#-------------------------------------------------------------
+SECTION
+!beginsection
+#Xle Yle Zle Chord Ainc Nspanwise Sspace
+3.800 14.000 1.120 0.8 0.0 0 0
+NACA
+2312
+!endsection
+!endsurface
+!endgeometry
