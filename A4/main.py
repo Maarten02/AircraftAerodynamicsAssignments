@@ -95,14 +95,14 @@ def vary_cant(N, Nchordwise=12, Nspanwise=20, clear_dirs=True, reRun=True, proce
         contents[15] = f'{Nchordwise} 1.0 {Nspanwise} 1.0\n'
 
         # Write the modified contents to a new file
-        filename = f'./cant_list_in/cant_{angles_int[i]}.avl'
+        filename = f'cant_list_in/cant_{angles_int[i]}.avl'
         with open(filename, 'w') as f:
             f.writelines(contents)
 
     # --- Run AVL.exe with the newly generated .avl files ---
     if reRun:
         # Get list of .avl files in ./cant_list folder
-        avl_files = [f for f in os.listdir('./cant_list_in') if f.endswith('.avl')]
+        avl_files = [f for f in os.listdir('cant_list_in') if f.endswith('.avl')]
 
         # Loop through avl_files and run avl.exe for each file
         for avl_file in avl_files:
@@ -118,13 +118,13 @@ def vary_cant(N, Nchordwise=12, Nspanwise=20, clear_dirs=True, reRun=True, proce
             captured_output, _ = avl_process.communicate(input=input_string)
 
             # Write the output to a file
-            with open(f'./cant_list_out/{avl_file[:-4]}.out', 'w') as out_file:
+            with open(f'cant_list_out/{avl_file[:-4]}.out', 'w') as out_file:
                 out_file.write(captured_output)
 
     if process:
         # --- extract CDind from the .out files ---
         cdind_values = []
-        out_files = os.listdir('./cant_list_out')
+        out_files = os.listdir('cant_list_out')
 
         plot_angles = []
         for file in out_files:
@@ -188,5 +188,5 @@ plt.title('$D_{ind}$ and $C_{D,ind}$' + f' vs. Cant Angle')
 plt.savefig(f'./figures/Di_N{N}_Ns{Ns}_Nc{Nc}.pdf', bbox_inches='tight', pad_inches=0.2)
 
 # Ns should be 12
-# Nc should be 16, less critical
+# Nc should be 16, seems less critical
 
