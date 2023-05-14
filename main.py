@@ -8,7 +8,7 @@ import csv
 
 
 
-def vary_cant(N, clear_dirs=True, reRun=True, process = True):
+def vary_cant(N, Nchordwise=12, Nspanwise=20,  clear_dirs=True, reRun=True, process=True):
     X_ow_le = 3.5
     Y_ow_le = 14
     Z_ow_le = 0
@@ -60,6 +60,8 @@ def vary_cant(N, clear_dirs=True, reRun=True, process = True):
 
         # Modify line 43
         contents[42] = row + contents[42][18:]
+        contents[15] = f'{Nchordwise} 1.0 {Nspanwise} 1.0\n'
+
 
         # Write the modified contents to a new file
         filename = f'./cant_list_in/cant_{angles_int[i]}.avl'
@@ -113,10 +115,23 @@ def vary_cant(N, clear_dirs=True, reRun=True, process = True):
         angles_sorted = [plot_angles[i] for i in sorted_indices]
         cd_ind_sorted = [cdind_values[i] for i in sorted_indices]
 
-        plt.plot(angles_sorted, cd_ind_sorted)
+        plt.plot(angles_sorted, cd_ind_sorted, label=f'Ns={Nspanwise}, Nc={Nchordwise}')
         plt.xlabel('Cant angle $\phi$ [degrees] (0=vertical, 90=horizontal)')
         plt.ylabel('CDind [-]')
         plt.title(f'CDind vs. cant angle for {N} different angles')
-        plt.savefig(f'./figures/CDi_v_cant_{N}.pdf')
 
-vary_cant(11)
+N=21
+#Nc_list = range(10, 20, 2)
+#Ns_list = range(10, 20, 2)
+Ns_list = [12, 14, 16]
+Nc_list = [14]
+for Ns in Ns_list:
+    plt.figure()
+    for Nc in Nc_list:
+        vary_cant(N, Nc, Ns)
+    plt.legend()
+    plt.savefig(f'./figures/Cdi_N{N}_Ns{Ns}.pdf')
+
+# NS SHOULD BE 12
+# NC should be 14, but doesnt really matter
+
