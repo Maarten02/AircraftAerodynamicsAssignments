@@ -38,17 +38,16 @@ def runNoWinglet():
 
 
 
-def vary_cant(N, Nchordwise=12, Nspanwise=20, clear_dirs=True, reRun=True, process=True):
+def vary_cant(N, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs=True, reRun=True, process=True):
     X_ow_le = 3.5
     Y_ow_le = 14
     Z_ow_le = 0
     wing_end_c = 2
     taper = 0.4
-    tip_length = 0.08
     Cwr = 1
     Lambda = 15/180 * math.pi
     lw = tip_length * 2 * Y_ow_le
-
+    tip_length = 0.08
     winglets = []
     angles = []
     angles_int = []
