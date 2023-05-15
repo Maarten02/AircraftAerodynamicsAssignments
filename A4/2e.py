@@ -24,7 +24,7 @@ v = 0.5 * 320.53    # [m/s]
 #================ END NOTES ===================
 
 
-def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs=True):
+def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs=False):
     X_ow_le = 3.5
     Y_ow_le = 14
     Z_ow_le = 0
@@ -34,13 +34,13 @@ def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs
     Lambda = 15/180 * math.pi
     lw = tip_length * 2 * Y_ow_le
 
-    # span = 2 * (Y_ow_le + lw)
-    # Sref = (5.5 + 2) * 0.5 * span + 2 * (1 + taper) * lw
-    # Cref = Sref / span
-
-    span = 28
-    Sref = span * 0.5 * (5.5 + 2)
+    span = 2 * (Y_ow_le + lw)
+    Sref = (5.5 + 2) * 0.5 * span + 2 * (1 + taper) * lw
     Cref = Sref / span
+
+    # span = 28
+    # Sref = span * 0.5 * (5.5 + 2)
+    # Cref = Sref / span
 
     # --- Determine Xle, Yle, Zle for the wingtip for N cant angles ---
     dX = math.tan(Lambda) * lw
@@ -60,11 +60,12 @@ def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs
 
     # --- delete all input and output files ---
     directory = './cant_list_in'
-    files = os.listdir(directory)
+    if clear_dirs:
+        files = os.listdir(directory)
 
-    # Iterate over all files and remove each one
-    for file in files:
-        os.remove(os.path.join(directory, file))
+        # Iterate over all files and remove each one
+        for file in files:
+            os.remove(os.path.join(directory, file))
 
     # -------- write the .avl files --------
     # Open the geom_template.avl file
@@ -77,14 +78,15 @@ def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs
     contents[42] = winglet + contents[42][18:]
 
     # Write the modified contents to a new file
-    filename = f'cant_list_in/cant_2e_{angle}.avl'
+    tlf = round(tip_length*100)
+    filename = f'cant_list_in/cant_{angle}_lw{tlf}.avl'
     with open(filename, 'w') as f:
         f.writelines(contents)
 
     # --- Run AVL.exe with the newly generated .avl files ---
     # Start subprocess and pass input commands as a string
     avl_process = subprocess.Popen('avl.exe', stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
-    input_string = f'load ./cant_list_in/cant_2e_{angle}.avl\n' \
+    input_string = f'load ./cant_list_in/cant_{angle}_lw{tlf}.avl\n' \
                    'case ./case.run\n' \
                    'oper\n' \
                    'x\n'
@@ -96,7 +98,7 @@ def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs
     return cdind
 
 # (1) vary tip_length for phi=0 and see cdi change
-tip_lenght_arr = np.arange(0.04, 0.125, 0.005)
+tip_lenght_arr = np.arange(0.04, 0.165, 0.005)
 cdi_arr = []
 phi = 0
 for tip_length in tip_lenght_arr:
@@ -110,10 +112,12 @@ cdi_tip_extension = fixed_cant(90)
 fig, ax_cd = plt.subplots()
 
 ax_cd.plot(tip_lenght_arr, cdi_arr, marker='.', label='Winglet ($\phi = 0$)')
-ax_cd.hlines(y=cdi_tip_extension, xmin=0.04, xmax=0.12, linewidth=2, linestyle='--', label='Tip Extension ($\phi = 90$)')
+ax_cd.hlines(y=cdi_tip_extension, xmin=0.04, xmax=0.16, linewidth=2, linestyle='--', label='Tip Extension \n ($\phi = 90$, height/span=0.08)')
 ax_cd.set_ylabel('$C_{D,ind}$ [-]')
-ax_cd.set_xlabel('Winglet Height [%span]')
+ax_cd.set_xlabel('Winglet Height/Span [-]')
 ax_cd.grid()
 ax_cd.legend()
-plt.title('$C_{D,ind}$ vs. Winglet lenght')
-plt.savefig(f'./figures/vary_tip_length.pdf')
+
+
+plt.title('$C_{D,ind}$ vs. Winglet length')
+plt.savefig(f'./figures/vary_tip_length_varref.pdf')
