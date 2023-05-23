@@ -32,7 +32,7 @@ NACA
 SECTION
 !beginsection
 #Xle Yle Zle Chord Ainc Nspanwise Sspace
-3.5 14.0 0.0 2.0 0.0 0 0
+3.500 14.000 0.000 2.0 0.0 0 0
 NACA
 2312
 !endsection
