@@ -34,13 +34,13 @@ def fixed_cant(angle=0, tip_length=0.08, Nchordwise=12, Nspanwise=12, clear_dirs
     Lambda = 15/180 * math.pi
     lw = tip_length * 2 * Y_ow_le
 
-    span = 2 * (Y_ow_le + lw)
-    Sref = (5.5 + 2) * 0.5 * span + 2 * (1 + taper) * lw
-    Cref = Sref / span
-
-    # span = 28
-    # Sref = span * 0.5 * (5.5 + 2)
+    # span = 2 * (Y_ow_le + lw)
+    # Sref = (5.5 + 2) * 0.5 * span + 2 * (1 + taper) * lw
     # Cref = Sref / span
+
+    span = 28
+    Sref = span * 0.5 * (5.5 + 2)
+    Cref = Sref / span
 
     # --- Determine Xle, Yle, Zle for the wingtip for N cant angles ---
     dX = math.tan(Lambda) * lw
